@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Todo app with Spring Boot Thymeleaf + Spring Security </title>
+
+    <div th:replace="fragments/header :: header-css"/>
+
+</head>
+<body>
+
+<div th:replace="fragments/navigation :: navigation"/>
+
+<div class="container">
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">Home Page</div>
+        <div class="panel-body">
+            Welcome ${name}!! <a href="/list-todos">Click here</a> to manage your
+            todo's.
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>
