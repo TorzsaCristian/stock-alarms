@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stock Alarms</title>
+
+    <div th:replace="fragments/header :: header-css"/>
+
+</head>
+<body>
+
+<div th:replace="fragments/navigation :: navigation"/>
+
+<div id="wrap">
+    <div class="container">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3>★ Favourite stocks ★</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped" align="right">
+                    <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Latest Price</th>
+                        <th>Alarm set</th>
+                        <th>Latest System Update</th>
+                        <th width="25%">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="stock : ${stocks}">
+                        <td th:text="${stock.symbol}"></td>
+                        <td th:text="${stock.price}"></td>
+                        <td>
+                            <span th:if="${stock.hasAlarm}">YES</span>
+                            <span th:unless="${stock.hasAlarm}">NO</span>
+                        </td>
+                        <td th:text="${#dates.format(stock.lastSystemUpdate, 'dd/MM/yyyy @HH:mm')}"></td>
+
+                        <td align="right">
+                            <button th:if="${!stock.hasAlarm}" type="button" class="btn btn-primary"
+                                    th:attrappend="data-stock-symbol=${stock.symbol}"
+                                    data-toggle="modal"
+                                    data-target="#exampleModal">
+                                Add Alarm
+                            </button>
+                            <a th:unless="${!stock.hasAlarm}" th:href="@{/update-alarm(id=${stock.id})}"
+                               class="btn btn-warning">Update alarm</a>
+                            <a type="button" class="btn btn-danger"
+                               th:href="@{/delete-stock(id=${stock.id})}">Remove</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div>
+            <a type="button" class="btn btn-primary btn-md" href="/add-stock">Add Stock</a>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">Add alarm to ...</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="alarmForm" action="#" th:action="@{/add-alarm}" th:object="${alarmForm}" method="post">
+                        <label>Trigger alarm at
+                            <input type="text" th:field="*{condition}" placeholder="ex: -10"/>%
+                        </label>
+
+                        <input id="alarmFormStockSymbol" type="hidden" th:field="*{stockSymbol}"/>
+                        <p><input type="submit" value="submit" class="btn btn-primary"></p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="button" class="btn btn-primary" form="alarmForm" value="Save alarm">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div th:replace="fragments/footer :: footer"/>
+
+<script>
+    $(document).ready(function () {
+        $('#exampleModal').on('shown.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var stockSymbol = button.data('stock-symbol');
+            console.log(stockSymbol);
+            var modal = $(this);
+            modal.find('.modal-title').text('Add alarm to ' + stockSymbol + '.');
+
+            $("#alarmFormStockSymbol").val(stockSymbol);
+
+            $('#exampleModal').trigger('focus');
+        });
+    });
+</script>
+
+</body>
+</html>

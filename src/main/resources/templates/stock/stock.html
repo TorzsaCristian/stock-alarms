@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stock Alarms<</title>
+
+    <div th:replace="fragments/header :: header-css"/>
+
+</head>
+<body>
+
+<div th:replace="fragments/navigation :: navigation"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 ">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Add Stock</div>
+                <div class="panel-body">
+                    <form method="post" modelAttribute="stock">
+                        <fieldset th:if="${#fields.hasErrors('${stock.*}')}" class="text-warning">
+                            <legend>Some errors appeared !</legend>
+                            <ul>
+                                <li th:each="err : ${#fields.errors('stock.*')}" th:text="${err}"></li>
+                            </ul>
+                        </fieldset>
+
+                        <input type="hidden" th:field="*{stock.id}">
+                        <fieldset class="form-group">
+                            <label for="symbol">Symbol</label>
+                            <!--<input path="description" type="text" class="form-control"-->
+                            <!--required="required" />-->
+                            <input type="text" name="symbol" id="symbol" class="form-control input-lg"
+                                   placeholder="Symbol" th:field="*{stock.symbol}" required="required"
+                                   autofocus="true"/>
+                        </fieldset>
+
+
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

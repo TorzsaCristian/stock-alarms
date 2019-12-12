@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Todo app with Spring Boot Thymeleaf + Spring Security </title>
 
@@ -15,8 +16,16 @@
     <div class="panel panel-primary">
         <div class="panel-heading">Home Page</div>
         <div class="panel-body">
-            Welcome ${name}!! <a href="/list-todos">Click here</a> to manage your
-            todo's.
+            <h3>Welcome <span th:text="${username}">!</span></h3>
+            <hr>
+            <p>
+            <a href="/list-stocks">Click here</a> to manage your
+            stocks.
+                </p>
+            <p>
+            <a href="/list-alarms">Click here</a> to manage your
+            alarms.
+            </p>
         </div>
     </div>
 </div>

@@ -1,23 +1,30 @@
 package com.torzsa.stockalarms.controller;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Controller("error")
+@ControllerAdvice
 public class ErrorController {
 
-    @ExceptionHandler(Exception.class)
-    public ModelAndView handleException(HttpServletRequest request, Exception ex) {
-        ModelAndView mv = new ModelAndView();
+    private static Logger logger = LoggerFactory.getLogger(ErrorController.class);
 
-        mv.addObject("exception", ex.getLocalizedMessage());
-        mv.addObject("url", request.getRequestURL());
-
-        mv.setViewName("error");
-        return mv;
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String exception(final Throwable throwable, final Model model) {
+        logger.error("Exception during execution of SpringSecurity application", throwable);
+        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
+        model.addAttribute("errorMessage", errorMessage);
+        return "error";
     }
+
 }
